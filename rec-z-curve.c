@@ -6,7 +6,7 @@ void z_curve_aux(int **arr, int i, int j, int n)
 {
     if (n == 0)
     {
-        printf("%d", arr[i][j]);
+        printf("%d ", arr[i][j]);
         return;
     }
     else if (n == 1)
@@ -17,6 +17,7 @@ void z_curve_aux(int **arr, int i, int j, int n)
         printf("%d ", arr[i + 1][j + 1]);
         return;
     }
+
     z_curve_aux(arr, i, j, n - 1);
     z_curve_aux(arr, i, j + (1 << (n - 1)), n - 1);
     z_curve_aux(arr, i + (1 << (n - 1)), j, n - 1);
@@ -43,13 +44,16 @@ int main()
 {
     int m;
     scanf("%d", &m);
+
     int temp = pow(2, m);
     int count = 0;
     int **arr = (int **)malloc(temp * sizeof(int *));
+
     for (int i = 0; i < temp; i++)
     {
         arr[i] = (int *)malloc(temp * sizeof(int));
     }
+
     for (int i = 0; i < temp; i++)
     {
         for (int j = 0; j < temp; j++)
@@ -58,7 +62,9 @@ int main()
             arr[i][j] = count;
         }
     }
+
     printf("The Z-Curve order of elements:\n");
     z_curve(arr, m);
+
     return 0;
 }
