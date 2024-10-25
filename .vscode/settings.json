@@ -4,6 +4,7 @@
         "time.h": "c",
         "math.h": "c",
         "stdio.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "common.h": "c"
     }
 }
