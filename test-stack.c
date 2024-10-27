@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int DATA;
+
 typedef struct
 {
     unsigned int capacity, top;
-    int *contents;
+    DATA *contents;
 } STACK;
 
 // Function to initialize the stack

@@ -58,7 +58,7 @@ int init_tree(TREE *t, int capacity)
     t->capacity = capacity;
     t->root = -1;
     t->num_nodes = 0;
-    t->node_list = (TNODE *)malloc(sizeof(TNODE) * capacity);
+    t->node_list = (TNODE *)malloc(capacity * sizeof(TNODE));
 
     if (t->node_list == NULL)
     {

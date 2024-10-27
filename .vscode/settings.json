@@ -5,6 +5,11 @@
         "math.h": "c",
         "stdio.h": "c",
         "stdlib.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "array": "c",
+        "deque": "c",
+        "string": "c",
+        "vector": "c",
+        "string_view": "c"
     }
 }
