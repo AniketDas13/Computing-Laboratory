@@ -30,6 +30,14 @@ LinkedList *create_linked_list()
     list->list_length = 0;
     return list;
 }
+// Alternate Implementation
+// LinkedList create_linked_list()
+// {
+//     LinkedList list;
+//     list.head = NULL;
+//     list.list_length = 0;
+//     return list;
+// }
 
 // Function to add a node at the end
 void append(LinkedList *list, int data)
@@ -65,6 +73,7 @@ void rearrange(LinkedList *list)
     {
         if (current->data % 2 != 0)
         { // Odd value
+          // if (odd_head == NULL)
             if (!odd_head)
             {
                 odd_head = odd_tail = current;
@@ -77,6 +86,7 @@ void rearrange(LinkedList *list)
         }
         else
         { // Even value
+          // if (even_head == NULL)
             if (!even_head)
             {
                 even_head = even_tail = current;
@@ -120,21 +130,26 @@ int main(int argc, char *argv[])
     }
 
     LinkedList *list = create_linked_list();
+    // LinkedList list = create_linked_list();
 
     // Parse command-line arguments and append to list
     for (int i = 1; i < argc; i++)
     {
         int value = atoi(argv[i]);
         append(list, value);
+        // append(&list, value);
     }
 
     printf("Original list: ");
     print_list(list);
+    // print_list(&list);
 
     rearrange(list);
+    // rearrange(&list);
 
     printf("Rearranged list: ");
     print_list(list);
+    // print_list(&list);
 
     return 0;
 }

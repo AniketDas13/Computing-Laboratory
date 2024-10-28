@@ -12,9 +12,9 @@ typedef struct node
 
 typedef struct _tree
 {
+    int root;
     int capacity;
     int num_of_nodes;
-    int root;
     node *nodelist;
 } tree;
 
@@ -23,7 +23,7 @@ void init_tree(tree *t, int n)
     t->capacity = 100;
     t->num_of_nodes = n;
     t->nodelist = (node *)malloc(100 * sizeof(node));
-    t->root = 1;
+    t->root = 0;
     return;
 }
 
@@ -66,15 +66,14 @@ int main()
     }
 
     k = num;
-    int n = pow(2, k + 1) - 1;
+    int n = pow(2, k + 1) - 1; //(1 << (k + 1)) - 1
     init_tree(&t, n);
 
     int i;
-    int p = pow(2, k) - 1;
+    int p = pow(2, k) - 1; // internal nodes
     int counter = 0;
-    int *arr = malloc((p + 1) * sizeof(int));
-    int l = 0;
-    int x[3] = {-1};
+    int *arr = malloc((p + 1) * sizeof(int)); // leaf nodes
+    int x[k];
     int m = 0;
 
     while (EOF != (c = fgetc(ptr)))
@@ -99,6 +98,8 @@ int main()
         }
     }
 
+    fclose(ptr);
+
     for (i = 0; i < p; i++)
     {
         t.nodelist[i].data = ceil(log(i + 2) / log(2));
@@ -116,7 +117,6 @@ int main()
         t.nodelist[i].level = k + 1;
     }
 
-    fclose(ptr);
     print_tree(&t, "output2a.txt");
 
     return 0;

@@ -11,12 +11,19 @@ int compare(const void *a, const void *b)
 {
     const struct Student *pa = (const struct Student *)a;
     const struct Student *pb = (const struct Student *)b;
+    return (pa->roll_no - pb->roll_no); // Sort by roll number
+}
+
+int compare_marks(const void *a, const void *b)
+{
+    const struct Student *pa = (const struct Student *)a;
+    const struct Student *pb = (const struct Student *)b;
     return (pb->marks - pa->marks); // Sort in descending order of marks
 }
 
 int main()
 {
-    struct Student students[] = {{1, 85}, {2, 75}, {3, 90}, {4, 60}};
+    struct Student students[] = {{2, 85}, {4, 75}, {3, 90}, {1, 60}};
     int n = sizeof(students) / sizeof(students[0]);
 
     qsort(students, n, sizeof(students[0]), compare);
@@ -36,10 +43,26 @@ int main()
     ... qsort(arr, n, sizeof(int), compare); ...
     */
 
-    printf("Students sorted by marks (descending order):\n");
+    // Sort the array by roll number
+    printf("Students sorted by roll no. (ascending order):\n");
     for (int i = 0; i < n; i++)
     {
         printf("Roll No: %d, Marks: %d\n", students[i].roll_no, students[i].marks);
+    }
+
+    // Search for a student with roll number 3
+    int roll_no_to_find = 3;
+    struct Student *found_student = bsearch(&roll_no_to_find, students, n, sizeof(students[0]), compare);
+
+    // void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
+
+    if (found_student)
+    {
+        printf("Student found: Roll No: %d, Marks: %d\n", found_student->roll_no, found_student->marks);
+    }
+    else
+    {
+        printf("Student not found.\n");
     }
 
     return 0;
