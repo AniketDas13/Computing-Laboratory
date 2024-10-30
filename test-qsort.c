@@ -21,6 +21,26 @@ int compare_marks(const void *a, const void *b)
     return (pb->marks - pa->marks); // Sort in descending order of marks
 }
 
+int compare(const void *a, const void *b)
+{
+    const struct Student *pa = (const struct Student *)a;
+    const struct Student *pb = (const struct Student *)b;
+
+    // Compare marks using double precision comparison
+    if (pa->marks < pb->marks) // Sort by marks when in float or double
+    {
+        return -1;
+    }
+    else if (pa->marks > pb->marks)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 int main()
 {
     struct Student students[] = {{2, 85}, {4, 75}, {3, 90}, {1, 60}};
