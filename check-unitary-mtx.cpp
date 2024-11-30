@@ -1,5 +1,6 @@
-// Stream: MTechCS
-// RollNo: CS2407
+// Check Unitary Matrix
+//  Stream: MTechCS
+//  RollNo: CS2407
 
 #include <iostream>
 #include <complex>
