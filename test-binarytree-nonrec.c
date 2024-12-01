@@ -153,13 +153,11 @@ void postorder(TREE *t, int root)
     if (root == -1)
         return;
 
-    /*
-    Recursive Approach: 3 ops per node - visit first, explore left and come back, explore right and come back, finally print it. This op seq is repeated for every node.
-    postorder(t, tree->node_list[root].left);
-    postorder(t, tree->node_list[root].right);
-    printf("%d", t->node_list[root].d);
-    return;
-    */
+    // Recursive Approach: 3 ops per node - visit first, explore left and come back, explore right and come back, finally print it. This op seq is repeated for every node.
+    // postorder(t, tree->node_list[root].left);
+    // postorder(t, tree->node_list[root].right);
+    // printf("%d", t->node_list[root].d);
+    // return;
 
     STACK S;
     PAIR X;

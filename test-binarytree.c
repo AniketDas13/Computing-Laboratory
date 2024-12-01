@@ -29,16 +29,16 @@ void preorder(TREE tree, int root)
     preorder(tree, tree.node_list[root].right);
 }
 
-void inorder(TREE tree, int root)
+void inorder(TREE *tree, int root)
 {
     if (root == -1)
     {
         return;
     }
 
-    inorder(tree, tree.node_list[root].left);
-    printf("%d ", tree.node_list[root].d);
-    inorder(tree, tree.node_list[root].right);
+    inorder(tree, tree->node_list[root].left);
+    printf("%d ", tree->node_list[root].d);
+    inorder(tree, tree->node_list[root].right);
 }
 
 void postorder(TREE tree, int root)
@@ -105,7 +105,7 @@ int main()
     printf("\n");
 
     printf("Inorder traversal: ");
-    inorder(tree, tree.root);
+    inorder(&tree, tree.root);
     printf("\n");
 
     printf("Postorder traversal: ");
