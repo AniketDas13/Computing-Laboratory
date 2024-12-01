@@ -27,8 +27,8 @@ node *genrho(int M, int x0)
 {
     node *head = create_node(x0); // Initialize the list with the starting value x0
     node *current = head;         // Pointer to keep track of the last node added
-    node *slow = head;            // Slow pointer for cycle detection
-    node *fast = head;            // Fast pointer for cycle detection
+    // node *slow = head;            // Slow pointer for cycle detection
+    // node *fast = head;            // Fast pointer for cycle detection
 
     printf("%d: Inserted... continuing...\n", x0); // Output for the first node
 

@@ -5,7 +5,7 @@
 
 int m, n, cnt;
 
-void no_pixel(int **R, int i, int j, int **V, int c)
+void no_pixel(int **R, int i, int j, int **V)
 {
 
     if (R[i][j] == 0)
@@ -15,37 +15,38 @@ void no_pixel(int **R, int i, int j, int **V, int c)
     {
         V[i][j] = -1;
         cnt++;
+
         if (i - 1 >= 0 && j - 1 >= 0)
         {
-            no_pixel(R, i - 1, j - 1, V, c);
+            no_pixel(R, i - 1, j - 1, V);
         }
         if (i - 1 >= 0)
         {
-            no_pixel(R, i - 1, j, V, c);
+            no_pixel(R, i - 1, j, V);
         }
         if (i - 1 >= 0 && j + 1 < n)
         {
-            no_pixel(R, i - 1, j + 1, V, c);
+            no_pixel(R, i - 1, j + 1, V);
         }
         if (j - 1 >= 0)
         {
-            no_pixel(R, i, j - 1, V, c);
+            no_pixel(R, i, j - 1, V);
         }
         if (j + 1 >= 0)
         {
-            no_pixel(R, i, j + 1, V, c);
+            no_pixel(R, i, j + 1, V);
         }
         if (i + 1 < m && j - 1 >= 0)
         {
-            no_pixel(R, i + 1, j - 1, V, c);
+            no_pixel(R, i + 1, j - 1, V);
         }
         if (i + 1 < m)
         {
-            no_pixel(R, i + 1, j, V, c);
+            no_pixel(R, i + 1, j, V);
         }
         if (i + 1 < m && j + 1 < n)
         {
-            no_pixel(R, i + 1, j + 1, V, c);
+            no_pixel(R, i + 1, j + 1, V);
         }
     }
 }
@@ -89,7 +90,7 @@ int main()
             cnt = 0;
             if (R[i][j] == 1 && V[i][j] != -1)
             {
-                no_pixel(R, i, j, V, cnt);
+                no_pixel(R, i, j, V);
                 printf("%d %d %d\n", j, i, cnt);
             }
         }

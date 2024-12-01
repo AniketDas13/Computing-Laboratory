@@ -65,10 +65,12 @@ int find_successor(TREE *tree, int node)
     int child = tree->nodelist[node].right;
     if (child == -1)
         return -1;
+
     while (tree->nodelist[child].left != -1)
     {
         child = tree->nodelist[child].left;
     }
+
     return child;
 }
 
@@ -161,11 +163,12 @@ int delete(TREE *tree, int parent, int *root, int data)
         if (tree->nodelist[thisnode].left != -1 && tree->nodelist[thisnode].right != -1)
         {
             // Two children: Replace with successor
-            int successor = tree->nodelist[thisnode].right;
-            while (tree->nodelist[successor].left != -1)
-            {
-                successor = tree->nodelist[successor].left;
-            }
+            // int successor = tree->nodelist[thisnode].right;
+            // while (tree->nodelist[successor].left != -1)
+            // {
+            //     successor = tree->nodelist[successor].left;
+            // }
+            int successor = find_successor(tree, thisnode);
             tree->nodelist[thisnode].data = tree->nodelist[successor].data;
             return delete (tree, thisnode, &tree->nodelist[thisnode].right, tree->nodelist[successor].data);
         }
