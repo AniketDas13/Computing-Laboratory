@@ -1,0 +1,21 @@
+CC = gcc
+CFLAGS = -Iinclude -Wall -Wextra -std=c99
+AR = ar
+ARFLAGS = rcs
+
+LIB_NAME = libmylib.a
+SRC = src/tree.c src/heap.c src/stack.c src/queue.c
+OBJ = $(SRC:.c=.o)
+
+.PHONY: all clean
+
+all: $(LIB_NAME)
+
+$(LIB_NAME): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJ) $(LIB_NAME)

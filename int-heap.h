@@ -3,11 +3,11 @@
 
 #define INIT_HEAP_SIZE 100
 
-typedef struct {
+typedef struct
+{
     unsigned int num_allocated, num_used;
     int *array; /* one-based indexing used (cf. SEDGEWICK AND WAYNE) */
 } INT_HEAP;
-
 
 void initHeap(INT_HEAP *h);
 void insert(INT_HEAP *h, int x);

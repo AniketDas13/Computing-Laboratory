@@ -33,7 +33,6 @@ int main(int ac, char *av[])
         }
     }
 
-    /* write a delete_stack in stack.c and call it here to prevent a
-     * memory leak */
+    /* write a delete_stack in stack.c and call it here to prevent a memory leak */
     return 0;
 }
