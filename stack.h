@@ -10,7 +10,7 @@ typedef int DATA;
  */
 typedef struct
 {
-    unsigned int capacity, top;
+    unsigned int capacity, top, size, element_size;
     DATA *contents;
 } STACK;
 

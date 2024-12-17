@@ -1,5 +1,6 @@
 #include "common.h"
 #include "stack.h"
+#include "stack.c"
 
 #define MAX_OPS 100
 
