@@ -48,6 +48,10 @@ int isSeparable(Point *f, Point *g, int m, int n, double a, double b)
                 return 0;
         }
     }
+
+    if (f[0].x > g[n - 1].x || f[m - 1].x < g[0].x)
+        return 0;
+
     return 1;
 }
 
@@ -128,7 +132,11 @@ int main()
     else
         printf("NOT SEPARABLE");
 
-    printf(" %.4lf\n", calcArea(f, g, m, n, a, b));
+    double area = calcArea(f, g, m, n, a, b);
+    if (area != 0)
+        printf(" %.4lf\n", calcArea(f, g, m, n, a, b));
+    else
+        printf(" UNDEFINED\n");
 
     return 0;
 }
