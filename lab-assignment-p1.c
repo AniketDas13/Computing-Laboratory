@@ -31,6 +31,9 @@ int calcIntersection(Point f1, Point f2, Point g1, Point g2, Point *p_intersect)
 
 int isSeparable(Point *f, Point *g, int m, int n, double a, double b)
 {
+    if (f[0].x > g[n - 1].x || f[m - 1].x < g[0].x || a < fmax(f[0].x, g[0].x) || b > fmin(f[m - 1].x, g[n - 1].x))
+        return 0;
+
     for (int i = 0; i < m - 1; i++)
     {
         for (int j = 0; j < n - 1; j++)
@@ -48,9 +51,6 @@ int isSeparable(Point *f, Point *g, int m, int n, double a, double b)
                 return 0;
         }
     }
-
-    if (f[0].x > g[n - 1].x || f[m - 1].x < g[0].x)
-        return 0;
 
     return 1;
 }

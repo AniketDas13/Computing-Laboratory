@@ -66,14 +66,13 @@ int main()
                 continue;
 
             int new_pos = player_positions[p] + dice_rolls[i][p];
-
             if (new_pos > m * n)
             {
                 player_rounds[p] = i + 1;
                 continue;
             }
 
-            int *visited = (int *)calloc(m * n, sizeof(int));
+            int *visited = (int *)calloc(m * n + 1, sizeof(int));
             int curr_pos = new_pos;
 
             while (1)
@@ -107,19 +106,32 @@ int main()
                 if (!flag)
                     break;
 
-                if (curr_pos == new_pos)
+                // if (curr_pos == new_pos)
+                // {
+                //     is_looping[p] = 1;
+                //     player_rounds[p] = i + 1;
+                //     break;
+                // }
+
+                if (visited[curr_pos] > 1)
                 {
                     is_looping[p] = 1;
                     player_rounds[p] = i + 1;
                     break;
                 }
-
-                if (visited[curr_pos] > 1)
-                    break;
             }
 
-            // if (is_looping[p])
-            //     continue;
+            if (is_looping[p])
+                continue;
+
+            for (int j = 0; j < k; j++)
+            {
+                if (j != p && player_positions[j] == curr_pos)
+                {
+                    player_positions[j] = 0;
+                }
+            }
+
             player_positions[p] = curr_pos;
             player_rounds[p] = i + 1;
         }
