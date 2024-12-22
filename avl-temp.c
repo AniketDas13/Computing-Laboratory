@@ -123,3 +123,13 @@ void inorder(AVL_NODE *root)
         inorder(root->right);
     }
 }
+
+void preorder(AVL_NODE *root)
+{
+    if (root)
+    {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}

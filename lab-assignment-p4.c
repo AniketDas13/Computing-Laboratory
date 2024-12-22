@@ -35,20 +35,29 @@ int bloomSearch(unsigned char *bloom_filter, int m, int k, int x)
 
 int main(int ac, char *av[])
 {
-    if (ac < 4)
-    {
-        fprintf(stderr, "Missing required command-line arguments");
-        return 1;
-    }
+    // if (ac < 4)
+    // {
+    //     fprintf(stderr, "Missing required command-line arguments");
+    //     return 1;
+    // }
 
-    int m = atoi(av[1]);
-    int k = atoi(av[2]);
-    int n = ac - 3;
+    // int m = atoi(av[1]);
+    // int k = atoi(av[2]);
+    // int n = ac - 3;
+
+    // int *nums = (int *)malloc(n * sizeof(int));
+    // for (int i = 0; i < n; i++)
+    // {
+    //     nums[i] = atoi(av[i + 3]);
+    // }
+
+    int m, k, n;
+    scanf("%d %d %d", &m, &k, &n);
 
     int *nums = (int *)malloc(n * sizeof(int));
     for (int i = 0; i < n; i++)
     {
-        nums[i] = atoi(av[i + 3]);
+        scanf("%d", &nums[i]);
     }
 
     AVL_NODE *root = NULL;
@@ -61,19 +70,20 @@ int main(int ac, char *av[])
         root = insertAVL(root, nums[i], &inserted);
         if (inserted)
         {
-            printf("INSERTED: %d\n", nums[i]);
-            // inorder(root);
-            // printf("\n");
+            // printf("INSERTED: %d\n", nums[i]);
+            //  inorder(root);
+            //  printf("\n");
         }
         else
         {
-            printf("DUPLICATE: %d\n", nums[i]);
+            printf("AVL %d %d\n", i, nums[i]);
         }
     }
     clock_t end_avl = clock();
     // printf("%ld\n", end_avl);
 
     unsigned char *bloom_filter = (unsigned char *)calloc(m, sizeof(unsigned char));
+    int false_positive = 0;
 
     clock_t start_bloom = clock();
     // printf("%ld\n", start_bloom);
@@ -81,12 +91,13 @@ int main(int ac, char *av[])
     {
         if (bloomSearch(bloom_filter, m, k, nums[i]))
         {
-            printf("DUPLICATE: %d\n", nums[i]);
+            printf("BLOOM %d %d\n", i, nums[i]);
+            false_positive++;
         }
         else
         {
             bloomFilter(bloom_filter, m, k, nums[i]);
-            printf("INSERTED: %d\n", nums[i]);
+            // printf("INSERTED: %d\n", nums[i]);
         }
 
         // for (int k = 0; k < m; k++)
@@ -98,8 +109,10 @@ int main(int ac, char *av[])
     clock_t end_bloom = clock();
     // printf("%ld\n", end_bloom);
 
-    fprintf(stderr, "AVL Tree: size: %d, time: %.6f secs\n", countNodes(root), (double)(end_avl - start_avl) / CLOCKS_PER_SEC);
-    fprintf(stderr, "Bloom Filter: size: %d, time: %.6f secs\n", m, (double)(end_bloom - start_bloom) / CLOCKS_PER_SEC);
+    printf("%d\n", false_positive);
+    preorder(root);
+    // fprintf(stderr, "AVL Tree: size: %d, time: %.6f secs\n", countNodes(root), (double)(end_avl - start_avl) / CLOCKS_PER_SEC);
+    // fprintf(stderr, "Bloom Filter: size: %d, time: %.6f secs\n", m, (double)(end_bloom - start_bloom) / CLOCKS_PER_SEC);
 
     return 0;
 }
