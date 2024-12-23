@@ -6,15 +6,9 @@ void map1(void *input, void *output)
     char in = *(char *)input;
     char *out = output;
     if (isdigit(in))
-    {
         *out = 'A' + in - '0';
-        printf("%c %c\n", in, *out);
-    }
     else if (isalpha(in))
-    {
         *out = '0' + in % 10;
-        printf("%c %c\n", in, *out);
-    }
     else
         *out = in;
     return;

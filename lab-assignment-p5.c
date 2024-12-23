@@ -127,16 +127,16 @@ int main()
 
     scanf("%lf %lf", &a, &b);
 
-    if (isSeparable(f, g, m, n, a, b))
-        printf("SEPARABLE");
-    else
-        printf("NOT SEPARABLE");
-
-    // double area = calcArea(f, g, m, n, a, b);
-    // if (area != 0)
-    //     printf("%.4lf\n", calcArea(f, g, m, n, a, b));
+    // if (isSeparable(f, g, m, n, a, b))
+    //     printf("SEPARABLE");
     // else
-    //     printf("UNDEFINED\n");
+    //     printf("NOT SEPARABLE");
+
+    double area = calcArea(f, g, m, n, a, b);
+    if (area != 0)
+        printf("%.4lf\n", calcArea(f, g, m, n, a, b));
+    else
+        printf("UNDEFINED\n");
 
     return 0;
 }

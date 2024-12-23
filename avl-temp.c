@@ -1,25 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef int DATA;
+
 typedef struct node
 {
-    int data;
-    struct node *left, *right;
-    int height;
+    DATA data;
+    int left, right, parent, height;
 } AVL_NODE;
 
-AVL_NODE *createNode(int key)
+typedef struct
 {
-    AVL_NODE *node = (AVL_NODE *)malloc(sizeof(AVL_NODE));
-    node->data = key;
-    node->left = node->right = NULL;
-    node->height = 1;
-    return node;
+    unsigned int num_nodes, max_nodes;
+    int root, free_list;
+    AVL_NODE *nodelist;
+} TREE;
+
+TREE *createTree(unsigned int max_nodes)
+{
+    TREE *tree = (TREE *)malloc(sizeof(TREE));
+    tree->num_nodes = 0;
+    tree->max_nodes = max_nodes;
+    tree->root = -1;
+    tree->free_list = 0;
+    tree->nodelist = (AVL_NODE *)malloc(max_nodes * sizeof(AVL_NODE));
+
+    for (unsigned int i = 0; i < max_nodes - 1; i++)
+    {
+        tree->nodelist[i].left = i + 1;
+    }
+    tree->nodelist[max_nodes - 1].left = -1;
+    return tree;
 }
 
-int height(AVL_NODE *node)
+int height(TREE *tree, int index)
 {
-    return node ? node->height : 0;
+    return index != -1 ? tree->nodelist[index].height : 0;
 }
 
 int max(int a, int b)
@@ -27,109 +43,154 @@ int max(int a, int b)
     return (a > b) ? a : b;
 }
 
-AVL_NODE *rotateRight(AVL_NODE *y)
+int allocateNode(TREE *tree, DATA key)
 {
-    AVL_NODE *x = y->left;
-    AVL_NODE *T2 = x->right;
+    if (tree->free_list == -1)
+        exit(1);
 
-    x->right = y;
-    y->left = T2;
+    int index = tree->free_list;
+    tree->free_list = tree->nodelist[index].left;
 
-    y->height = max(height(y->left), height(y->right)) + 1;
-    x->height = max(height(x->left), height(x->right)) + 1;
+    tree->nodelist[index].data = key;
+    tree->nodelist[index].left = tree->nodelist[index].right = -1;
+    tree->nodelist[index].parent = -1;
+    tree->nodelist[index].height = 1;
+    tree->num_nodes++;
+
+    return index;
+}
+
+void deallocateNode(TREE *tree, int index)
+{
+    tree->nodelist[index].left = tree->free_list;
+    tree->free_list = index;
+    tree->num_nodes--;
+}
+
+int getBalance(TREE *tree, int index)
+{
+    if (index == -1)
+        return 0;
+
+    return height(tree, tree->nodelist[index].left) - height(tree, tree->nodelist[index].right);
+}
+
+int rotateRight(TREE *tree, int y)
+{
+    int x = tree->nodelist[y].left;
+    int T2 = tree->nodelist[x].right;
+
+    tree->nodelist[x].right = y;
+    tree->nodelist[x].parent = tree->nodelist[y].parent;
+
+    tree->nodelist[y].left = T2;
+    if (T2 != -1)
+        tree->nodelist[T2].parent = y;
+
+    tree->nodelist[y].parent = x;
+
+    tree->nodelist[y].height = max(height(tree, tree->nodelist[y].left), height(tree, tree->nodelist[y].right)) + 1;
+    tree->nodelist[x].height = max(height(tree, tree->nodelist[x].left), height(tree, tree->nodelist[x].right)) + 1;
 
     return x;
 }
 
-AVL_NODE *rotateLeft(AVL_NODE *x)
+int rotateLeft(TREE *tree, int x)
 {
-    AVL_NODE *y = x->right;
-    AVL_NODE *T2 = y->left;
+    int y = tree->nodelist[x].right;
+    int T2 = tree->nodelist[y].left;
 
-    y->left = x;
-    x->right = T2;
+    tree->nodelist[y].left = x;
+    tree->nodelist[y].parent = tree->nodelist[x].parent;
 
-    x->height = max(height(x->left), height(x->right)) + 1;
-    y->height = max(height(y->left), height(y->right)) + 1;
+    tree->nodelist[x].right = T2;
+    if (T2 != -1)
+        tree->nodelist[T2].parent = x;
+
+    tree->nodelist[x].parent = y;
+
+    tree->nodelist[x].height = max(height(tree, tree->nodelist[x].left), height(tree, tree->nodelist[x].right)) + 1;
+    tree->nodelist[y].height = max(height(tree, tree->nodelist[y].left), height(tree, tree->nodelist[y].right)) + 1;
 
     return y;
 }
 
-int getBalance(AVL_NODE *node)
+int insertAVL(TREE *tree, int index, DATA key)
 {
-    return node ? height(node->left) - height(node->right) : 0;
-}
+    if (index == -1)
+        return allocateNode(tree, key);
 
-AVL_NODE *insertAVL(AVL_NODE *root, int key, int *inserted)
-{
-    if (!root)
+    if (key < tree->nodelist[index].data)
     {
-        *inserted = 1;
-        return createNode(key);
+        int left_child = insertAVL(tree, tree->nodelist[index].left, key);
+        tree->nodelist[index].left = left_child;
+        tree->nodelist[left_child].parent = index;
     }
-
-    if (key < root->data)
+    else if (key > tree->nodelist[index].data)
     {
-        root->left = insertAVL(root->left, key, inserted);
-    }
-    else if (key > root->data)
-    {
-        root->right = insertAVL(root->right, key, inserted);
+        int right_child = insertAVL(tree, tree->nodelist[index].right, key);
+        tree->nodelist[index].right = right_child;
+        tree->nodelist[right_child].parent = index;
     }
     else
     {
-        *inserted = 0;
-        return root;
+        return index;
     }
 
-    root->height = 1 + max(height(root->left), height(root->right));
+    tree->nodelist[index].height = 1 + max(height(tree, tree->nodelist[index].left), height(tree, tree->nodelist[index].right));
+    int balance = getBalance(tree, index);
 
-    int balance = getBalance(root);
-    if (balance > 1 && key < root->left->data)
+    if (balance > 1 && key < tree->nodelist[tree->nodelist[index].left].data)
+        return rotateRight(tree, index);
+
+    if (balance < -1 && key > tree->nodelist[tree->nodelist[index].right].data)
+        return rotateLeft(tree, index);
+
+    if (balance > 1 && key > tree->nodelist[tree->nodelist[index].left].data)
     {
-        return rotateRight(root);
-    }
-    if (balance < -1 && key > root->right->data)
-    {
-        return rotateLeft(root);
-    }
-    if (balance > 1 && key > root->left->data)
-    {
-        root->left = rotateLeft(root->left);
-        return rotateRight(root);
-    }
-    if (balance < -1 && key < root->right->data)
-    {
-        root->right = rotateRight(root->right);
-        return rotateLeft(root);
+        tree->nodelist[index].left = rotateLeft(tree, tree->nodelist[index].left);
+        return rotateRight(tree, index);
     }
 
-    return root;
+    if (balance < -1 && key < tree->nodelist[tree->nodelist[index].right].data)
+    {
+        tree->nodelist[index].right = rotateRight(tree, tree->nodelist[index].right);
+        return rotateLeft(tree, index);
+    }
+
+    return index;
 }
 
-int countNodes(AVL_NODE *root)
+void inorder(TREE *tree, int index)
 {
-    if (!root)
+    if (index != -1)
+    {
+        inorder(tree, tree->nodelist[index].left);
+        printf("%d ", tree->nodelist[index].data);
+        inorder(tree, tree->nodelist[index].right);
+    }
+}
+
+void preorder(TREE *tree, int index)
+{
+    if (index != -1)
+    {
+        printf("%d ", tree->nodelist[index].data);
+        preorder(tree, tree->nodelist[index].left);
+        preorder(tree, tree->nodelist[index].right);
+    }
+}
+
+int findNode(TREE *tree, int index, DATA key)
+{
+    if (index == -1)
         return 0;
-    return 1 + countNodes(root->left) + countNodes(root->right);
-}
 
-void inorder(AVL_NODE *root)
-{
-    if (root)
-    {
-        inorder(root->left);
-        printf("%d ", root->data);
-        inorder(root->right);
-    }
-}
+    if (tree->nodelist[index].data == key)
+        return 1;
 
-void preorder(AVL_NODE *root)
-{
-    if (root)
-    {
-        printf("%d ", root->data);
-        preorder(root->left);
-        preorder(root->right);
-    }
+    if (key < tree->nodelist[index].data)
+        return findNode(tree, tree->nodelist[index].left, key);
+    else
+        return findNode(tree, tree->nodelist[index].right, key);
 }
